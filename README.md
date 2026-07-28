@@ -124,3 +124,11 @@ addon icon are released under the MIT License. See `LICENSE`.
 
 The bundled Play Bold font is distributed separately under the SIL Open Font
 License 1.1. See `Media/OFL-Play.txt`.
+
+## Support development
+
+Enhanced Widget Control is free and will remain free. If you enjoy the addon and would like to support its continued development, you can buy me a coffee.
+
+[![Buy Me a Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://buymeacoffee.com/th3m0us3)
+
+Support is completely optional and never required to use any addon feature.
