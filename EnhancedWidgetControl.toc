@@ -1,0 +1,15 @@
+## Interface: 120007
+## Title: |cff1784d1ElvUI|r Enhanced Widget Control
+## Notes: ElvUI module for Blizzard nameplate widget bars
+## Author: Th3M0us3
+## Version: 2.15.0
+## OptionalDeps: ElvUI
+## DefaultState: Enabled
+## X-ElvuiVersion: 15.18
+## X-License: MIT
+## IconTexture: Interface\AddOns\EnhancedWidgetControl\Media\Icon.tga
+
+Compatibility.lua
+Media.lua
+Core.lua
+Options.lua
