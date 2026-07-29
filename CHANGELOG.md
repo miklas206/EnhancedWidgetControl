@@ -2,6 +2,12 @@
 
 All notable changes to Enhanced Widget Control are documented here.
 
+## 2.16
+
+- Added Retail Interface support for 12.0.7 and 12.1.0.
+- Added CurseForge and Wago project metadata for automated releases.
+- Added automated packaging and publishing through GitHub Actions.
+
 ## 2.15.0
 
 - Added an original Enhanced Widget Control addon icon.
