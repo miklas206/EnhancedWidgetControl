@@ -1275,10 +1275,20 @@ function EWC:ApplyWidget(widget, id)
 end
 
 function EWC:QueueApply(widget, id)
+    if self.widgets[id] == widget then
+        self:ApplyWidget(widget, id)
+    end
+end
+
+function EWC:RequestWidgetOptionsRefresh()
+    if self.widgetOptionsRefreshPending then
+        return
+    end
+
+    self.widgetOptionsRefreshPending = true
     C_Timer.After(0, function()
-        if self.widgets[id] == widget then
-            self:ApplyWidget(widget, id)
-        end
+        self.widgetOptionsRefreshPending = nil
+        self:RefreshWidgetOptions()
     end)
 end
 
@@ -1296,8 +1306,20 @@ function EWC:RegisterWidget(widget, category)
         return
     end
 
+    local displayText = GetDisplayText(widget) or ("Widget " .. tostring(id))
+    local previousWidget = self.widgets[id]
+    local previousText = self.detected[id]
+    local previousMetadata = self.metadata[id]
+    local widgetChanged = previousWidget ~= widget
+    local metadataChanged = not previousMetadata
+        or previousMetadata.category ~= (category or "Unknown")
+        or previousMetadata.widgetType ~= widget.widgetType
+        or previousMetadata.widgetSetID ~= widget.widgetSetID
+        or previousMetadata.textureKit
+            ~= (widget.textureKit or widget.frameTextureKit)
+
     self.widgets[id] = widget
-    self.detected[id] = GetDisplayText(widget) or ("Widget " .. tostring(id))
+    self.detected[id] = displayText
     self.metadata[id] = {
         category = category or "Unknown",
         widgetType = widget.widgetType,
@@ -1307,12 +1329,19 @@ function EWC:RegisterWidget(widget, category)
     self.seenThisSession = self.seenThisSession or {}
     self.seenThisSession[id] = true
 
+    local selectionChanged = false
     if not self.selectedWidgetID then
         self.selectedWidgetID = id
+        selectionChanged = true
     end
 
-    self:InitializeWidgetSettings(id, widget)
-    self:RefreshWidgetOptions()
+    if widgetChanged
+        or previousText ~= displayText
+        or metadataChanged
+        or selectionChanged then
+        self:RequestWidgetOptionsRefresh()
+    end
+
     self:QueueApply(widget, id)
 end
 
@@ -1345,7 +1374,17 @@ function EWC:GetContainerCategory(container)
     if container == _G.UIWidgetTopCenterContainerFrame then return "Top Center" end
     if container == _G.UIWidgetBelowMinimapContainerFrame then return "Below Minimap" end
     if container == _G.UIWidgetPowerBarContainerFrame then return "Power Bar" end
-    return "Nameplates / Other"
+
+    if C_NamePlate and C_NamePlate.GetNamePlates then
+        for _, plate in ipairs(C_NamePlate.GetNamePlates()) do
+            local unitFrame = plate.UnitFrame
+            if unitFrame and unitFrame.WidgetContainer == container then
+                return "Nameplates"
+            end
+        end
+    end
+
+    return nil
 end
 
 function EWC:ApplyAll()
@@ -1603,17 +1642,28 @@ function EWC:InitializeHooks()
 
     if UIWidgetContainerMixin and UIWidgetContainerMixin.CreateWidget then
         hooksecurefunc(UIWidgetContainerMixin, "CreateWidget", function(container)
+            local category = EWC:GetContainerCategory(container)
+            if not category then
+                return
+            end
+
             C_Timer.After(0, function()
-                EWC:ScanContainer(container, EWC:GetContainerCategory(container))
+                local currentCategory = EWC:GetContainerCategory(container)
+                if currentCategory then
+                    EWC:ScanContainer(container, currentCategory)
+                end
             end)
         end)
     end
 
     if UIWidgetContainerMixin and UIWidgetContainerMixin.ProcessWidget then
         hooksecurefunc(UIWidgetContainerMixin, "ProcessWidget", function(container)
-            C_Timer.After(0, function()
-                EWC:ScanContainer(container, EWC:GetContainerCategory(container))
-            end)
+            local category = EWC:GetContainerCategory(container)
+            if not category then
+                return
+            end
+
+            EWC:ScanContainer(container, category)
         end)
     end
 end

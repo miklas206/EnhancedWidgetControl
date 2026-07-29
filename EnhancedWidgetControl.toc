@@ -2,7 +2,7 @@
 ## Title: |cff1784d1ElvUI|r Enhanced Widget Control
 ## Notes: ElvUI module for Blizzard nameplate widget bars
 ## Author: Th3M0us3
-## Version: 2.16.1
+## Version: 2.16.2
 ## OptionalDeps: ElvUI
 ## DefaultState: Enabled
 ## X-ElvuiVersion: 15.18

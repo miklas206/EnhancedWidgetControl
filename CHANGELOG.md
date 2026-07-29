@@ -2,6 +2,15 @@
 
 All notable changes to Enhanced Widget Control are documented here.
 
+## 2.16.2
+
+- Prevented unsupported Blizzard widget containers from being styled.
+- Fixed overlapping text in world-map event tooltips while EWC is enabled.
+- Kept automatic detection for supported nameplate and global widget containers.
+- Applied processed widget styles in the same frame to prevent default-style flashes.
+- Avoided rebuilding ElvUI widget options during routine progress and timer updates.
+- Coalesced newly detected widgets into a single options refresh per frame.
+
 ## 2.16.1
 
 - Fixed automated CurseForge and GitHub release credentials.
