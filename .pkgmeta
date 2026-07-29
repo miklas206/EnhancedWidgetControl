@@ -1,0 +1,11 @@
+package-as: EnhancedWidgetControl
+
+ignore:
+  - .github
+  - Pictures
+  - tools
+  - outputs
+  - "*.zip"
+  - Media/EWC-Before-After-Comparison.jpg
+  - Media/EWC-Before-Under-2MB.jpg
+  - Media/EWC-After-Under-2MB.jpg
