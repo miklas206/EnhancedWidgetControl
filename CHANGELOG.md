@@ -2,6 +2,11 @@
 
 All notable changes to Enhanced Widget Control are documented here.
 
+## 2.16.1
+
+- Fixed automated CurseForge and GitHub release credentials.
+- Kept automated Wago publishing and Retail 12.0.7/12.1.0 compatibility.
+
 ## 2.16
 
 - Added Retail Interface support for 12.0.7 and 12.1.0.
